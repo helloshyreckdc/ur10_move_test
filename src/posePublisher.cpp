@@ -29,8 +29,11 @@ int main(int argc, char** argv){
     cokecan_pose.orientation.x = transform.getRotation().x();
     cokecan_pose.orientation.y = transform.getRotation().y();
     cokecan_pose.orientation.z = transform.getRotation().z();
-    cokecan_pose.position.x = -transform.getOrigin().y();
-    cokecan_pose.position.y = -transform.getOrigin().x();
+//    cokecan_pose.position.x = -transform.getOrigin().y();
+//    cokecan_pose.position.y = -transform.getOrigin().x();
+//    cokecan_pose.position.z = transform.getOrigin().z();
+    cokecan_pose.position.x = transform.getOrigin().x();
+    cokecan_pose.position.y = transform.getOrigin().y();
     cokecan_pose.position.z = transform.getOrigin().z();
     pose_pub.publish(cokecan_pose);
     
