@@ -15,9 +15,9 @@ int main(int argc, char** argv){
   while (node.ok()){
     tf::StampedTransform transform;
     try{
-      listener.waitForTransform("/cokecan", "/world", ros::Time(0), ros::Duration(3.0));
+      listener.waitForTransform("/world", "/cokecan", ros::Time(0), ros::Duration(3.0));
 //      listener.lookupTransform("/cokecan", "/world", ros::Time::now(), transform);
-      listener.lookupTransform("/cokecan", "/world", ros::Time(0), transform);
+      listener.lookupTransform("/world", "/cokecan", ros::Time(0), transform);
     }
     catch (tf::TransformException ex){
       ROS_ERROR("%s",ex.what());
