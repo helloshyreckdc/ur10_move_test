@@ -15,7 +15,7 @@ int main(int argc, char** argv)
     transform.setOrigin( tf::Vector3(-0.622, 0.073, 0.364));
 //    transform.setRotation( tf::Quaternion(-0.433, -0.325, 0.841, 0.003));
     tf::Quaternion q;
-    q.setRPY(-1.209, 1.506, -2.864);
+    q.setRPY(-1.209, 1.806, -2.864);
     transform.setRotation(q);
     br.sendTransform(tf::StampedTransform(transform, ros::Time::now(), "/world", "/cokecan"));
     rate.sleep();

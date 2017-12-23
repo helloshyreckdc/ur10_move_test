@@ -1,14 +1,25 @@
 #include <ros/ros.h>
+#include <std_msgs/Float64.h>
 #include <moveit/move_group_interface/move_group.h>
 
-  geometry_msgs::Pose target_pose;
+geometry_msgs::Pose target_pose;
+bool pub_gripper = false;
+int count = 0;   //count several second after grasping the object
 void chatterCallback(const geometry_msgs::Pose::ConstPtr& msg)
 {
   
 
   target_pose.position.x = msg->position.x;
   target_pose.position.y = msg->position.y;
-  target_pose.position.z = msg->position.z;
+// move above after grasping the object
+  if(count > 3)
+  {
+	target_pose.position.z = msg->position.z + 0.2;
+  }
+  else
+  {
+	target_pose.position.z = msg->position.z;
+  } 
 
 // set a fix orientation, when icp is improved, next piece of procedure
 // should be used
@@ -42,7 +53,17 @@ int main(int argc, char **argv)
 
   ros::Subscriber sub = n.subscribe("pose_chatter", 1000, chatterCallback);
 
-	ros::Rate rate(1.0);
+  ros::Publisher gripper_pub = n.advertise<std_msgs::Float64>("gripper_width", 10);
+  std_msgs::Float64 gripper_width;
+  
+
+  ros::Rate rate(1.0);
+
+//  ros::ServiceClient client = n.serviceClient<ur_control::RG2>("rg2_gripper/control_width");
+//  ur_control::RG2 srv;
+//  srv.request.target_width = 100.0;
+  
+
   moveit::planning_interface::MoveGroup::Plan my_plan;
   while(ros::ok())
   {
@@ -52,6 +73,14 @@ int main(int argc, char **argv)
 	if(success)
 	{
 	    move_group.move();
+	    pub_gripper = true;
+	}
+
+	if(pub_gripper)
+	{
+            gripper_width.data = 48.0;
+            gripper_pub.publish(gripper_width);
+	    ++count;
 	}
 
 	ros::spinOnce();
