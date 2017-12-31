@@ -205,3 +205,6 @@ target_link_libraries(posePublisher ${catkin_LIBRARIES})
 
 add_executable(ur10_move_test src/ur10_move_test.cpp)
 target_link_libraries(ur10_move_test ${catkin_LIBRARIES})
+
+add_executable(object_frame src/object_frame.cpp)
+target_link_libraries(object_frame ${catkin_LIBRARIES})
