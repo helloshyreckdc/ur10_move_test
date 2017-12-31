@@ -7,8 +7,8 @@ bool pub_gripper = false;
 int count = 0;   //count several second after grasping the object
 void chatterCallback(const geometry_msgs::Pose::ConstPtr& msg)
 {
-  
-
+    target_pose = *msg; 
+/*
   target_pose.position.x = msg->position.x;
   target_pose.position.y = msg->position.y;
 // move above after grasping the object
@@ -37,7 +37,7 @@ void chatterCallback(const geometry_msgs::Pose::ConstPtr& msg)
   //target_pose.position.x = position.x;
 
   //ROS_INFO("I heard: [%f]", target_pose.position.x);
-  
+*/  
 }
 
 int main(int argc, char **argv)
@@ -53,8 +53,8 @@ int main(int argc, char **argv)
 
   ros::Subscriber sub = n.subscribe("pose_chatter", 1000, chatterCallback);
 
-  ros::Publisher gripper_pub = n.advertise<std_msgs::Float64>("gripper_width", 10);
-  std_msgs::Float64 gripper_width;
+//  ros::Publisher gripper_pub = n.advertise<std_msgs::Float64>("gripper_width", 10);
+//  std_msgs::Float64 gripper_width;
   
 
   ros::Rate rate(1.0);
@@ -73,15 +73,16 @@ int main(int argc, char **argv)
 	if(success)
 	{
 	    move_group.move();
-	    pub_gripper = true;
+	    ros::param::set("/finished_job", true);
+//	    pub_gripper = true;
 	}
 
-	if(pub_gripper)
-	{
-            gripper_width.data = 48.0;
-            gripper_pub.publish(gripper_width);
-	    ++count;
-	}
+//	if(pub_gripper)
+//	{
+//            gripper_width.data = 48.0;
+//            gripper_pub.publish(gripper_width);
+//	    ++count;
+//	}
 
 	ros::spinOnce();
 	rate.sleep();
