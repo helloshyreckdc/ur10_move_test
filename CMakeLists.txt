@@ -208,3 +208,16 @@ target_link_libraries(ur10_move_test ${catkin_LIBRARIES})
 
 add_executable(object_frame src/object_frame.cpp)
 target_link_libraries(object_frame ${catkin_LIBRARIES})
+
+add_executable(place_target src/place_target.cpp)
+target_link_libraries(place_target ${catkin_LIBRARIES})
+
+add_executable(object_position_in_world src/object_position_in_world.cpp)
+target_link_libraries(object_position_in_world ${catkin_LIBRARIES})
+
+add_executable(pick_target src/pick_target.cpp)
+target_link_libraries(pick_target ${catkin_LIBRARIES})
+
+add_executable(process_control src/process_control.cpp)
+target_link_libraries(process_control ${catkin_LIBRARIES})
+
