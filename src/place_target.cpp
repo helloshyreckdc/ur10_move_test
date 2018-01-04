@@ -43,10 +43,10 @@ int main(int argc, char** argv){
 	    {
 		geometry_msgs::Pose place_target;
 		// give a fix orientation for testing
-		place_target.orientation.x = -0.500;
-		place_target.orientation.y = -0.488;
-		place_target.orientation.z = 0.541;
-		place_target.orientation.w = -0.468;
+		place_target.orientation.x = -0.510;
+		place_target.orientation.y = 0.490;
+		place_target.orientation.z = 0.494;
+		place_target.orientation.w = 0.506;
 
 		// can't use the direct icp result, need improving
 		//    place_target.orientation.w = transform.getRotation().w();
@@ -55,13 +55,14 @@ int main(int argc, char** argv){
 		//    place_target.orientation.z = transform.getRotation().z();
 
 		// const values are compensation for the camera and the world frame
-		place_target.position.x = x_old;
-		place_target.position.y = y_old;
-		place_target.position.z = z_old;
+		place_target.position.x = x_old + 0.06;
+		place_target.position.y = y_old + 0.01;
+		place_target.position.z = z_old + 0.06;
 		pose_pub.publish(place_target);
 		if(count == 50)
 		{
 		    ros::param::set("/finished_job", true);
+		    ROS_INFO("HEY");
 		    ++count;
 		}
 	    } 

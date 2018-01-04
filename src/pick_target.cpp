@@ -29,7 +29,7 @@ int main(int argc, char** argv){
 	ros::param::get("/pick_target", pick_target);
 	if(pick_target)
 	{
-	    if(count < 20)
+	    if(count < 50)
 	    {
 		float diff = (x-x_old)*(x-x_old) + (y-y_old)*(y-y_old) + (z-z_old)*(z-z_old);
 		if(diff > 0.00025)
@@ -43,10 +43,10 @@ int main(int argc, char** argv){
 	    {
 		geometry_msgs::Pose pick_target;
 		// give a fix orientation for testing
-		pick_target.orientation.x = -0.500;
-		pick_target.orientation.y = -0.488;
-		pick_target.orientation.z = 0.541;
-		pick_target.orientation.w = -0.468;
+		pick_target.orientation.x = -0.510;
+		pick_target.orientation.y = 0.490;
+		pick_target.orientation.z = 0.494;
+		pick_target.orientation.w = 0.506;
 
 		// can't use the direct icp result, need improving
 		//    pick_target.orientation.w = transform.getRotation().w();
@@ -55,13 +55,14 @@ int main(int argc, char** argv){
 		//    pick_target.orientation.z = transform.getRotation().z();
 
 		// const values are compensation for the camera and the world frame
-		pick_target.position.x = x_old;
-		pick_target.position.y = y_old;
-		pick_target.position.z = z_old;
+		pick_target.position.x = x_old + 0.06;
+		pick_target.position.y = y_old + 0.01;
+		pick_target.position.z = z_old + 0.06;
 		pose_pub.publish(pick_target);
-		if(count == 20)
+		if(count == 50)
 		{
-		    ros::param:set("/finished_job", true);
+		    ros::param::set("/finished_job", true);
+		    ROS_INFO("hey");
 		    ++count;
 		}
 	    } 

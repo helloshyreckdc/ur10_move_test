@@ -12,10 +12,10 @@ int main(int argc, char** argv)
     ros::Rate rate(10.0);
     while(node.ok())
     {
-	transform.setOrigin( tf::Vector3(-0.622, 0.073, 0.364));
+	transform.setOrigin( tf::Vector3(-0.651, 0.122, 0.235));
 	//    transform.setRotation( tf::Quaternion(-0.433, -0.325, 0.841, 0.003));
 	tf::Quaternion q;
-	q.setRPY(-1.209, 1.806, -2.864);
+	q.setRPY(2.610, 1.451, -2.222);
 	transform.setRotation(q);
 	br.sendTransform(tf::StampedTransform(transform, ros::Time::now(), "/world", "/cokecan"));
 	rate.sleep();

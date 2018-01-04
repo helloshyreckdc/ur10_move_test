@@ -65,25 +65,35 @@ int main(int argc, char **argv)
 
 
     moveit::planning_interface::MoveGroup::Plan my_plan;
+
+    int count = 0;
+    bool move_ur = false;
     while(ros::ok())
     {
-
-	move_group.setPoseTarget(target_pose);
-	bool success = move_group.plan(my_plan);
-	if(success)
+	ros::param::get("/move_ur", move_ur);
+	if(move_ur)
 	{
-	    move_group.move();
-	    ros::param::set("/finished_job", true);
-	    //	    pub_gripper = true;
+		move_group.setPoseTarget(target_pose);
+		bool success = move_group.plan(my_plan);
+		if(success)
+		{
+		    move_group.asyncExecute(my_plan);
+		    ROS_INFO("HELLO!");
+		    ros::Duration(5.0).sleep();
+		    ros::param::set("/finished_job", true);
+		    ++count;
+		    ROS_INFO("%d", count);
+		    ros::param::set("/move_ur", false);
+		    //	    pub_gripper = true;
+		}
+	
+		//	if(pub_gripper)
+		//	{
+		//            gripper_width.data = 48.0;
+		//            gripper_pub.publish(gripper_width);
+		//	    ++count;
+		//	}
 	}
-
-	//	if(pub_gripper)
-	//	{
-	//            gripper_width.data = 48.0;
-	//            gripper_pub.publish(gripper_width);
-	//	    ++count;
-	//	}
-
 	ros::spinOnce();
 	rate.sleep();
 

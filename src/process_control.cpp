@@ -1,4 +1,5 @@
 #include <ros/ros.h>
+#include <std_msgs/Float64.h>
 #include <tf/transform_listener.h>
 
 geometry_msgs::Pose place_pose;
@@ -25,7 +26,7 @@ int main(int argc, char** argv){
     ros::Publisher gripper_pub = node.advertise<std_msgs::Float64>("gripper_width", 10);
     std_msgs::Float64 gripper_width;
 
-    ros::Rate rate(10.0);
+    ros::Rate rate(1.0);
 
     int step = 1;  // indicate which step is processing
     bool finished = false; // indicate if the job is finished
@@ -35,7 +36,7 @@ int main(int argc, char** argv){
 	ros::param::get("/finished_job", finished);	
 	if(finished)
 	{
-	    finished = false;
+	    ros::param::set("/finished_job", false);	
 	    ++step;
 	}
 	switch(step)
@@ -54,48 +55,55 @@ int main(int argc, char** argv){
 
 	    case 3:
 	    {
+//		pick_pose.position.z += 0.1;
 		pose_pub.publish(pick_pose);
+		ros::param::set("/move_ur", true);
 		break;
 	    }
 
 	    case 4:
 	    {
-		gripper_width = 48;
+		gripper_width.data = 48;
 		gripper_pub.publish(gripper_width);
 		break;
 	    }
 
 	    case 5:
 	    {
-		pick_pose.position.z += 0.2;
+		pick_pose.position.z += 0.05;
 		pose_pub.publish(pick_pose);
+		ros::param::set("/move_ur", true);
 		break;
 	    }
 
 	    case 6:
 	    {
-		place_pose.position.z += 0.2;
+		place_pose.position.z += 0.05;
 		pose_pub.publish(place_pose);
+		ros::param::set("/move_ur", true);
 		break;
 	    }
 
 	    case 7:
 	    {
+//		place_pose.position.z += 0.1;
 		pose_pub.publish(place_pose);
+		ros::param::set("/move_ur", true);
 		break;
 	    }
 
 	    case 8:
 	    {
-		gripper_width = 100;
+		gripper_width.data = 100;
 		gripper_pub.publish(gripper_width);
 		break;
 	    }
 
 	    case 9:
 	    {
-		place_pose.position.z += 0.2;
+		place_pose.position.z += 0.05;
 		pose_pub.publish(place_pose);
+		ros::param::set("/move_ur", true);
 		break;
 	    }
 
@@ -105,8 +113,14 @@ int main(int argc, char** argv){
 	    }
 
 	}
+	ROS_INFO("step %d\n", step);
 	ros::spinOnce();
 	rate.sleep();
     }
+
+    ros::param::set("/move_ur", false);
+    ros::param::set("/finished_job", false);
+    ros::param::set("/place_target", false);
+    ros::param::set("/pick_target", false);
     return 0;
 };

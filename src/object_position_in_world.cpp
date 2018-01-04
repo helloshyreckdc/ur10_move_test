@@ -15,7 +15,7 @@ int main(int argc, char** argv){
     while (node.ok()){
 	tf::StampedTransform transform;
 	try{
-	    listener.waitForTransform("/world", "/gravity_frame", ros::Time(0), ros::Duration(3.0));
+	    listener.waitForTransform("/world", "/gravity_frame", ros::Time(0), ros::Duration(25.0));
 	    //      listener.lookupTransform("/cokecan", "/world", ros::Time::now(), transform);
 	    listener.lookupTransform("/world", "/gravity_frame", ros::Time(0), transform);
 	}
