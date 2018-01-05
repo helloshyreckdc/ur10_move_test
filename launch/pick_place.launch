@@ -5,15 +5,15 @@
 
   <node name="object_position_in_world" pkg="ur10_move_test" type="object_position_in_world" />
 
+  <node name="ur10_move_test" pkg="ur10_move_test" type="ur10_move_test" />
 
+  <node name="place_target" pkg="ur10_move_test" type="place_target" />
+
+  <node name="pick_target" pkg="ur10_move_test" type="pick_target" />
 
   <node name="gripper_control" pkg="ur_modern_driver" type="test_gripper" />
 
 <!--
   <node name="process_control" pkg="ur10_move_test" type="process_control" />
-  <node name="ur10_move_test" pkg="ur10_move_test" type="ur10_move_test" />
-  <node name="place_target" pkg="ur10_move_test" type="place_target" />
-
-  <node name="pick_target" pkg="ur10_move_test" type="pick_target" />
   -->
 </launch>

@@ -10,8 +10,11 @@ void positionCallback(const geometry_msgs::Pose::ConstPtr& msg)
     x = msg->position.x;
     y = msg->position.y;
     z = msg->position.z;
+    // should use an algorithm to record orientation
 }
-int main(int argc, char** argv){
+
+int main(int argc, char** argv)
+{
     ros::init(argc, argv, "place_target_publisher");
 
     ros::NodeHandle node;
@@ -25,7 +28,8 @@ int main(int argc, char** argv){
 
     bool place_target = false;
 
-    while (node.ok()){
+    while (node.ok())
+    {
 	ros::param::get("/place_target", place_target);
 	if(place_target)
 	{
@@ -48,16 +52,9 @@ int main(int argc, char** argv){
 		place_target.orientation.z = 0.494;
 		place_target.orientation.w = 0.506;
 
-		// can't use the direct icp result, need improving
-		//    place_target.orientation.w = transform.getRotation().w();
-		//    place_target.orientation.x = transform.getRotation().x();
-		//    place_target.orientation.y = transform.getRotation().y();
-		//    place_target.orientation.z = transform.getRotation().z();
-
-		// const values are compensation for the camera and the world frame
-		place_target.position.x = x_old + 0.06;
-		place_target.position.y = y_old + 0.01;
-		place_target.position.z = z_old + 0.06;
+		place_target.position.x = x_old;
+		place_target.position.y = y_old;
+		place_target.position.z = z_old;
 		pose_pub.publish(place_target);
 		if(count == 50)
 		{
@@ -66,6 +63,10 @@ int main(int argc, char** argv){
 		    ++count;
 		}
 	    } 
+	}
+	else
+	{
+	    count = 0;
 	}
 
 	ros::spinOnce();

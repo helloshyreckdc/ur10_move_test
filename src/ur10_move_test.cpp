@@ -78,11 +78,10 @@ int main(int argc, char **argv)
 		if(success)
 		{
 		    move_group.asyncExecute(my_plan);
-		    ROS_INFO("HELLO!");
-		    ros::Duration(5.0).sleep();
+		    ros::Duration(1.0).sleep();
 		    ros::param::set("/finished_job", true);
 		    ++count;
-		    ROS_INFO("%d", count);
+		    ROS_INFO("move %d", count);
 		    ros::param::set("/move_ur", false);
 		    //	    pub_gripper = true;
 		}

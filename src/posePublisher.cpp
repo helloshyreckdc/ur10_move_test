@@ -1,7 +1,8 @@
 #include <ros/ros.h>
 #include <tf/transform_listener.h>
 
-int main(int argc, char** argv){
+int main(int argc, char** argv)
+{
     ros::init(argc, argv, "pose_publisher");
 
     ros::NodeHandle node;
@@ -14,14 +15,17 @@ int main(int argc, char** argv){
 
     ros::param::set("/move_ur", true);
 
-    while (node.ok()){
+    while (node.ok())
+    {
 	tf::StampedTransform transform;
-	try{
+	try
+	{
 	    listener.waitForTransform("/world", "/cokecan", ros::Time(0), ros::Duration(3.0));
 	    //      listener.lookupTransform("/cokecan", "/world", ros::Time::now(), transform);
 	    listener.lookupTransform("/world", "/cokecan", ros::Time(0), transform);
 	}
-	catch (tf::TransformException ex){
+	catch (tf::TransformException ex)
+	{
 	    ROS_ERROR("%s",ex.what());
 	    ros::Duration(1.0).sleep();
 	}

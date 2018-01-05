@@ -15,7 +15,8 @@ void pickCallback(const geometry_msgs::Pose::ConstPtr& msg)
     pick_pose = *msg;
 }
 
-int main(int argc, char** argv){
+int main(int argc, char** argv)
+{
     ros::init(argc, argv, "process_control");
 
     ros::NodeHandle node;
@@ -26,7 +27,7 @@ int main(int argc, char** argv){
     ros::Publisher gripper_pub = node.advertise<std_msgs::Float64>("gripper_width", 10);
     std_msgs::Float64 gripper_width;
 
-    ros::Rate rate(1.0);
+    ros::Rate rate(10.0);
 
     int step = 1;  // indicate which step is processing
     bool finished = false; // indicate if the job is finished
@@ -70,7 +71,7 @@ int main(int argc, char** argv){
 
 	    case 5:
 	    {
-		pick_pose.position.z += 0.05;
+		pick_pose.position.z += 0.28;
 		pose_pub.publish(pick_pose);
 		ros::param::set("/move_ur", true);
 		break;
@@ -78,7 +79,7 @@ int main(int argc, char** argv){
 
 	    case 6:
 	    {
-		place_pose.position.z += 0.05;
+		place_pose.position.z += 0.15;
 		pose_pub.publish(place_pose);
 		ros::param::set("/move_ur", true);
 		break;
@@ -101,8 +102,8 @@ int main(int argc, char** argv){
 
 	    case 9:
 	    {
-		place_pose.position.z += 0.05;
-		pose_pub.publish(place_pose);
+		pick_pose.position.z += 0.35;
+		pose_pub.publish(pick_pose);
 		ros::param::set("/move_ur", true);
 		break;
 	    }

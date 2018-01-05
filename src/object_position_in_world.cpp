@@ -1,7 +1,8 @@
 #include <ros/ros.h>
 #include <tf/transform_listener.h>
 
-int main(int argc, char** argv){
+int main(int argc, char** argv)
+{
     ros::init(argc, argv, "object_position_in_world_publisher");
 
     ros::NodeHandle node;
@@ -12,14 +13,17 @@ int main(int argc, char** argv){
 
     ros::Rate rate(10.0);
 
-    while (node.ok()){
+    while (node.ok())
+    {
 	tf::StampedTransform transform;
-	try{
+	try
+	{
 	    listener.waitForTransform("/world", "/gravity_frame", ros::Time(0), ros::Duration(25.0));
 	    //      listener.lookupTransform("/cokecan", "/world", ros::Time::now(), transform);
 	    listener.lookupTransform("/world", "/gravity_frame", ros::Time(0), transform);
 	}
-	catch (tf::TransformException ex){
+	catch (tf::TransformException ex)
+	{
 	    ROS_ERROR("%s",ex.what());
 	    ros::Duration(1.0).sleep();
 	}
@@ -31,16 +35,15 @@ int main(int argc, char** argv){
 	//    cokecan_pose.orientation.z = 0.541;
 	//    cokecan_pose.orientation.w = -0.468;
 
-	// can't use the direct icp result, need improving
 	cokecan_pose.orientation.w = transform.getRotation().w();
 	cokecan_pose.orientation.x = transform.getRotation().x();
 	cokecan_pose.orientation.y = transform.getRotation().y();
 	cokecan_pose.orientation.z = transform.getRotation().z();
 
 	// const values are compensation for the camera and the world frame
-	cokecan_pose.position.x = transform.getOrigin().x();
-	cokecan_pose.position.y = transform.getOrigin().y();
-	cokecan_pose.position.z = transform.getOrigin().z();
+	cokecan_pose.position.x = transform.getOrigin().x() + 0.06;
+	cokecan_pose.position.y = transform.getOrigin().y() + 0.03;
+	cokecan_pose.position.z = transform.getOrigin().z() + 0.06;
 	pose_pub.publish(cokecan_pose);
 
 	rate.sleep();
