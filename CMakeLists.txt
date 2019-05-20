@@ -203,6 +203,9 @@ target_link_libraries(tf_broadcaster ${catkin_LIBRARIES})
 add_executable(posePublisher src/posePublisher.cpp)
 target_link_libraries(posePublisher ${catkin_LIBRARIES})
 
+add_executable(base_to_sensor src/base_to_sensor.cpp)
+target_link_libraries(base_to_sensor ${catkin_LIBRARIES})
+
 add_executable(ur10_move_test src/ur10_move_test.cpp)
 target_link_libraries(ur10_move_test ${catkin_LIBRARIES})
 
