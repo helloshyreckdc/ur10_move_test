@@ -2,6 +2,9 @@
 #include <tf/transform_listener.h>
 #include <Eigen/Eigen>
 #include <fstream>
+#include <geometry_msgs/WrenchStamped.h>
+
+void dataCallback(const geometry_msgs::WrenchStamped::ConstPtr& msg);
 
 void print4x4Matrix(const Eigen::Matrix4d & matrix)
 {
@@ -13,7 +16,7 @@ void print4x4Matrix(const Eigen::Matrix4d & matrix)
 	printf("t = < %6.3f, %6.3f, %6.3f >\n\n", matrix (0, 3), matrix (1, 3), matrix (2, 3));
 }
 
-void write(const Eigen::Matrix4d & matrix)
+void write_matrix(const Eigen::Matrix4d & matrix)
 {
 	const char *pFileName = "T.txt";
 	FILE *pFile;
@@ -32,6 +35,38 @@ void write(const Eigen::Matrix4d & matrix)
 	fclose(pFile);
 }
 
+void write_wrench(double x, double y, double z, double fx,double fy,double fz)
+{
+	const char *pFileName = "O.txt";
+	FILE *pFile;
+	pFile = fopen(pFileName, "a"); //a mode for not covering original data
+	if(NULL == pFile)
+	{
+		printf("error");
+		return;
+	}
+
+	fprintf(pFile, "%9.6f \n", x);
+	fprintf(pFile, "%9.6f \n", y);
+	fprintf(pFile, "%9.6f \n", z);
+	fprintf(pFile, "%9.6f \n", fx);
+	fprintf(pFile, "%9.6f \n", fy);
+	fprintf(pFile, "%9.6f \n", fz);
+	fprintf(pFile, "\n");
+	fclose(pFile);
+}
+
+void dataCallback(const geometry_msgs::WrenchStamped::ConstPtr& msg)
+{
+	double x = msg->wrench.force.x;
+	double y = msg->wrench.force.y;
+	double z = msg->wrench.force.z;
+	double fx = msg->wrench.torque.x;
+	double fy = msg->wrench.torque.y;
+	double fz = msg->wrench.torque.z;
+	write_wrench(x, y, z, fx, fy, fz);
+}
+
 int main(int argc, char** argv)
 {
 	ros::init(argc, argv, "base_to_sensor");
@@ -41,6 +76,7 @@ int main(int argc, char** argv)
 	tf::TransformListener listener;
 
 	ros::Publisher pose_pub = node.advertise<geometry_msgs::Pose>("trans_chatter", 1000);
+	ros::Subscriber sensor_sub = node.subscribe("/ethdaq_data_raw",10, dataCallback);
 
 	ros::Rate rate(1.0);
 
@@ -95,10 +131,11 @@ int main(int argc, char** argv)
 		T(3,3) = 1;
 
 		print4x4Matrix(T);
-		write(T);
+		write_matrix(T);
 		pose_pub.publish(sensor_frame_pose);
 
 		rate.sleep();
+		ros::spinOnce();
 	}
 	return 0;
 };
