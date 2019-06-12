@@ -218,6 +218,9 @@ target_link_libraries(place_target ${catkin_LIBRARIES})
 add_executable(object_position_in_world src/object_position_in_world.cpp)
 target_link_libraries(object_position_in_world ${catkin_LIBRARIES})
 
+add_executable(time_convert src/time_convert.cpp)
+target_link_libraries(time_convert ${catkin_LIBRARIES})
+
 add_executable(pick_target src/pick_target.cpp)
 target_link_libraries(pick_target ${catkin_LIBRARIES})
 
